@@ -1,0 +1,5 @@
+from transformers import pipeline
+
+emotion_model = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base", return_all_scores=False)
+
+df['emotion'] = df['cleaned'].apply(lambda x: emotion_model(x)[0]['label'])
