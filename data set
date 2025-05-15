@@ -1,0 +1,30 @@
+rom youtube_comment_downloader import YoutubeCommentDownloader
+import pandas as pd
+import argparse
+
+def collect_comments(video_url, output_file='youtube_comments.csv'):
+    downloader = YoutubeCommentDownloader()
+    comments = []
+
+    print(f"Fetching comments from: {video_url}")
+    try:
+        for comment in downloader.get_comments_from_url(video_url, sort_by="top"):
+            comments.append(comment['text'])
+    except Exception as e:
+        print(f"Error fetching comments: {e}")
+        return
+
+    if comments:
+        df = pd.DataFrame(comments, columns=['comment'])
+        df.to_csv(output_file, index=False)
+        print(f"Saved {len(comments)} comments to {output_file}")
+    else:
+        print("No comments were retrieved.")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Download YouTube comments to a CSV file.")
+    parser.add_argument("url", help="YouTube video URL")
+    parser.add_argument("-o", "--output", default="youtube_comments.csv", help="Output CSV filename")
+
+    args = parser.parse_args()
+    collect_comments(args.url, args.output)
