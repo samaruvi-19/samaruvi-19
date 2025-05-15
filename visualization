@@ -1,0 +1,7 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.countplot(x='emotion', data=df)
+plt.title("Emotion Distribution in YouTube Comments")
+plt.xticks(rotation=45)
+plt.show()
